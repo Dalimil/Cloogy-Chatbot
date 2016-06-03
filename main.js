@@ -4,6 +4,7 @@ const morgan = require('morgan'); // General request logger
 const session = require('express-session'); // session cookies
 const MongoStore = require('connect-mongo')(session); // Session data storage (server-side MongoDB)
 const mongoose = require('mongoose'); // ORM for MongoDB
+const request = require('request');
 const path = require('path'); // path.join
 const pp = function(s){ return path.join(__dirname, s); };
 const app = express();
@@ -53,12 +54,47 @@ app.get('/', function(req, res) {
 
 app.get('/list', userController.listAll);
 
-app.get('/webhook', function(req, res) {
-	if (req.query['hub.verify_token'] === 'my_face_token') {
-		res.send(req.query['hub.challenge']);
-	}
-	res.send('Error, wrong validation token');
-});
+app.route('/webhook')
+	.get(function(req, res) {
+		if (req.query['hub.verify_token'] === config.FB.APP_VERIFY) {
+			res.send(req.query['hub.challenge']);
+		}
+		res.send('Error, wrong validation token');
+	})
+	.post(function (req, res) {
+		messaging_events = req.body.entry[0].messaging;
+		for (i = 0; i < messaging_events.length; i++) {
+			event = req.body.entry[0].messaging[i];
+			sender = event.sender.id;
+			if (event.message && event.message.text) {
+				text = event.message.text;
+				console.log(text);
+				// sendTextMessage(sender, "Text received, echo: "+ text.substring(0, 200));
+			}
+		}
+		res.sendStatus(200);
+	});
+
+function sendTextMessage(sender, text) {
+  messageData = {
+    text:text
+  }
+  request.get({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token: config.FB.ACCESS_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id: sender},
+      message: messageData,
+    }
+  }, function(error, response, body) {
+    if (error) {
+      console.log('Error sending message: ', error);
+    } else if (response.body.error) {
+      console.log('Error: ', response.body.error);
+    }
+  });
+}
 
 app.get('/user/:name', function(req, res) { /* Path can also be a regexp */
    console.log("Got a GET request with a pattern match");
