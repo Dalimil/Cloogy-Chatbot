@@ -1,0 +1,23 @@
+{
+  "name": "cloogy-chatbot",
+  "version": "1.0.0",
+  "description": "Cloogy Facebook Chatbot",
+  "main": "main.js",
+  "scripts": {
+    "start": "nodemon main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dalimil Hajek",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "connect-mongo": "^1.2.0",
+    "crypto": "0.0.3",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "mongoose": "^4.4.19",
+    "morgan": "^1.7.0",
+    "pug": "^2.0.0-alpha7",
+    "request": "^2.72.0"
+  }
+}
