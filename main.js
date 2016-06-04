@@ -56,6 +56,10 @@ app.get('/units', cloogyController.listAllUnits);
 
 app.get('/consumptionsAllMonth', cloogyController.consumptionsAllMonth);
 
+app.route('/findDevices').get(cloogyController.findDevices);
+
+app.route('/findUnits').get(cloogyController.findUnits);
+
 app.route('/webhook')
   .get(botController.verify)
   .post(botController.messageReceived);

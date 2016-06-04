@@ -1,6 +1,7 @@
 const request = require('request');
 const config = require('../config');
 
+const cloogy = require('../utils/cloogy');
 
 function sendTextMessage(sender, messageData) {
     const payload = {
@@ -34,7 +35,7 @@ function addQuestion(question, options, answer) {
         buttons.push({
             "type":"postback",
             "title":options[i],
-            "payload":"TRIVIA_Q"+i+"_"+letter[i]
+            "payload":"TRIVIA_Q"+questions.length+"_"+letter[i]
         })
     }
     questions.push({
@@ -67,15 +68,18 @@ function handleTrivia(event, sender) {
         id = event.postback.payload
         for(var i=0; i<questions.length; i++) {
             var prefix = 'TRIVIA_Q'+i+'_';
-            if(id.indexOf(prefix) >= 0 ){
+            console.log('Prefix: '+prefix);
+            if(id.indexOf(prefix) >= 0){
+                console.log('Activating: '+prefix);
                 var answer = id.replace(prefix,'');
                 console.log('Answered: "'+answer+'"')
                 if(answer == correct[i]) {
-                    sendTextMessage(sender, 'Correct!');
+                    sendTextMessage(sender, {text:'Correct!'});
                     GLOBAL.score++;
                 } else {
-                    sendTextMessage(sender, 'Not correct :(');
+                    sendTextMessage(sender, {text:'Not correct :('});
                 }
+                console.log(i+' vs '+(questions.length-1))
                 if(i < questions.length-1) {
                     sendTextMessage(sender, questions[i+1]);
                 } else {
@@ -83,9 +87,11 @@ function handleTrivia(event, sender) {
                     var minScore = questions.length*2/3;
                     if(GLOBAL.score >= questions.length*2/3) {
                         sendTextMessage(sender, {text:'Congrats, enjoy the light!'});
-
+                        cloogy.actuate(1, function() {});
                     } else {
                         sendTextMessage(sender, {text:'Sorry, not this time! You should get at least '+minScore+' questions right ;)'});
+
+                        cloogy.actuate(0, function() {});
                     }
                 }
                 break;
