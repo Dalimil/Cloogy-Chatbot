@@ -55,11 +55,9 @@ addQuestion('How are you?',['Great','Good','Bad'],'c');
 addQuestion('What time is it?',['1','2','3'],'c');
 addQuestion('Final question',['2','3','4'],'5');
 
-console.log(questions);
-console.log(correct);
 function startTrivia(sender){
     sendTextMessage(sender, {text:'Hi, let\'s do a trivia quiz.'});
-    sendTextMessage(sender, question[0]);
+    sendTextMessage(sender, questions[0]);
     GLOBAL.score = 0;
 }
 
