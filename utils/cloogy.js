@@ -113,7 +113,7 @@ function consumptionsAll(cb) {
 
 function consumptions(cb) {
   var req = {
-    uri: 'http://api.cloogy.com/api/1.4/consumptions/daily?from=1464739200000&tags=%5B148057%5D&to=1467331199000',
+    uri: 'http://api.cloogy.com/api/1.4/consumptions/yearly?from=1464730000000&tags=%5B148057%5D&to=1467331199000',
     json: true,
     headers: { 'Authorization': 'ISA ' + token },
   };

@@ -1,14 +1,28 @@
 var cloogy = require('../utils/cloogy');
 
 exports.chart = function(req, res){ // route
-	var data = [40,60,60,45,47,75,70,72];
-	var xAxisLabel = 'Categories';
-	var yAxisLabel = 'Count';
+  cloogy.consumptionsAll(function(raw) {
+    var data = raw.map(function(x) { return x.Read * 1000; });
+	var xLabels = raw.map(function(x) { 
+		var date = new Date(x.Date);
+		return date.getMonth() + '/' + date.getDay();
+	});
+	var yLabels = raw.map(function(x) { return (x.Read * 1000) + ' W'; });
 	var width = 250;
 	var height = 100;
-	var uri = 'https://chart.googleapis.com/chart?cht=lc&chd=t:' + data.join(",") + '&chs=' + width + 'x' + height + '&chl=' + xAxisLabel + '|' + yAxisLabel;
+	
+	var args = [
+		'cht=lc',
+		'chxt=x,y',
+		'chd=t:' + data.join(','),
+		'chs=' + width + 'x' + height,
+		'chxl=0:|' + xLabels.join('|') + '|1:|' + yLabels.join('|')
+	];
+	
+	var uri = 'https://chart.googleapis.com/chart?' + args.join('&');
 
-  console.log(uri);
-  
-  res.end(uri);
+	console.log(uri);
+
+	res.end(uri);
+  });
 };
