@@ -23,7 +23,7 @@
 
 var rp = require('request-promise');
 
-var token = "LKC0LUx0nfsM9hqQe8YQG2GHaEF4tN57CwE6mW83GJ78VJEccarGpGJo/ALGb4Kyl5UYKdK8xhSPCPVO/kW63A9oNDqe8+wy4LpSDZBDV9wg660VjD0tgDH7"; // 6873
+var token = "dpQxLlhQo8brcNuEN/hN6nkFDvP3Y3E29PVcToniaZY+un5QZ60FWTum3Vd1tlggCLfONrj07OSLVVk9b09zfEs8EOsJQA=="; // 6873
 
 function findUnits(cb) {
   var req = {
@@ -73,21 +73,46 @@ function findDevices(cb) {
     });
 }
 
-function actuate(tagId, command, cb) {
+function actuate(command, cb) {
   var req = {
     uri: 'http://api.cloogy.com/api/1.4/actuations',
     json: true,
     method: 'POST',
     headers: { 'Authorization': 'ISA ' + token },
     body: {
-      "TagId": "a",//tagId,
-      "Command": "a"//command
+      "TagIds": [148058],
+      "Command": command
     }
   };
 
   var res = rp(req)
     .then(function (res) {
       cb(res);
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+}
+
+function consumptions(cb) {
+  var req = {
+    uri: 'http://api.cloogy.com/api/1.4/consumptions/daily?from=1464739200000&tags=%5B148057%5D&to=1467331199000',
+    json: true,
+    headers: { 'Authorization': 'ISA ' + token },
+  };
+
+  var res = rp(req)
+    .then(function (res) {
+      const data = res.reduce(function (a, b) {
+          return {
+            Read: a.Read + b.Read,
+            ReadCarbon: a.ReadCarbon + b.ReadCarbon,
+            Trees: a.Trees + b.Trees,
+            Cars: a.Cars + b.Cars
+          };
+      })
+      cb(data);
+      // cb(res);
     })
     .catch(function (err) {
       console.log(err.response.body);
@@ -99,5 +124,6 @@ module.exports = {
   findUnits: findUnits,
   findTags: findTags,
   findDevices: findDevices,
-  actuate: actuate
+  actuate: actuate,
+  consumptions: consumptions
 };
