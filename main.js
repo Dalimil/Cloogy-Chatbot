@@ -50,6 +50,8 @@ app.get('/chart', chartController.chart);
 
 app.get('/units', cloogyController.listAllUnits);
 
+app.get('/consumptionsAll', cloogyController.consumptionsAll);
+
 app.route('/webhook')
   .get(botController.verify)
   .post(botController.messageReceived);

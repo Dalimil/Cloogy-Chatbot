@@ -5,3 +5,9 @@ exports.listAllUnits = function(req, res){ // route
     res.jsonPretty(data);
   });
 };
+
+exports.consumptionsAll = function(req, res){ // route
+  cloogy.consumptionsAll(function(data) {
+    res.jsonPretty(data);
+  });
+};

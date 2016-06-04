@@ -94,6 +94,23 @@ function actuate(command, cb) {
     });
 }
 
+function consumptionsAll(cb) {
+  var req = {
+    uri: 'http://api.cloogy.com/api/1.4/consumptions/daily?from=1464739200000&tags=%5B148057%5D&to=1467331199000',
+    json: true,
+    headers: { 'Authorization': 'ISA ' + token },
+  };
+
+  var res = rp(req)
+    .then(function (res) {
+      
+      cb(res);
+    })
+    .catch(function (err) {
+      console.log(err.response.body);
+    });
+}
+
 function consumptions(cb) {
   var req = {
     uri: 'http://api.cloogy.com/api/1.4/consumptions/daily?from=1464739200000&tags=%5B148057%5D&to=1467331199000',
@@ -112,7 +129,7 @@ function consumptions(cb) {
           };
       })
       cb(data);
-      // cb(res);
+      //cb(res);
     })
     .catch(function (err) {
       console.log(err.response.body);
@@ -125,5 +142,6 @@ module.exports = {
   findTags: findTags,
   findDevices: findDevices,
   actuate: actuate,
-  consumptions: consumptions
+  consumptions: consumptions,
+  consumptionsAll: consumptionsAll
 };

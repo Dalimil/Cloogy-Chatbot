@@ -1,3 +1,5 @@
+var cloogy = require('../utils/cloogy');
+
 exports.chart = function(req, res){ // route
 	var data = [40,60,60,45,47,75,70,72];
 	var xAxisLabel = 'Categories';
