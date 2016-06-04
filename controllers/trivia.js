@@ -58,7 +58,9 @@ addQuestion('Final question',['2','3','4'],'5','');
 
 function startTrivia(sender){
     sendTextMessage(sender, {text:'Hi, let\'s do a trivia quiz.'});
-    sendTextMessage(sender, questions[0]);
+    setTimeout(function(){
+        sendTextMessage(sender, questions[0]);
+    },500);
     GLOBAL.score = 0;
 }
 
@@ -79,7 +81,9 @@ function handleTrivia(event, sender) {
                 } else {
                     sendTextMessage(sender, {text:'Not correct :('});
                 }
-                sendTextMessage(sender, {text:facts[i]});
+                setTimeout(function(){
+                    sendTextMessage(sender, {text:facts[i]});
+                },500);
                 console.log(i+' vs '+(questions.length-1))
                 if(i < questions.length-1) {
                     sendTextMessage(sender, questions[i+1]);
@@ -87,11 +91,15 @@ function handleTrivia(event, sender) {
                     sendTextMessage(sender, {text:'Done! Your score is '+GLOBAL.score});
                     var minScore = questions.length*2/3;
                     if(GLOBAL.score >= questions.length*2/3) {
-                        sendTextMessage(sender, {text:'Congrats, enjoy the light!'});
+                        setTimeout(function(){
+                            sendTextMessage(sender, {text:'Congrats, enjoy the light!'});
+                        },500);
                         cloogy.actuate(1, function() {});
                     } else {
-                        sendTextMessage(sender, {text:'Sorry, not this time! You should get at least '+minScore+' questions right ;)'});
+                        setTimeout(function(){
+                            sendTextMessage(sender, {text:'Sorry, not this time! You should get at least '+minScore+' questions right ;)'});
 
+                        },500);
                         cloogy.actuate(0, function() {});
                     }
                 }
