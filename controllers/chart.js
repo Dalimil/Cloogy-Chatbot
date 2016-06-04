@@ -5,7 +5,7 @@ exports.chart = function(cb){ // route
     var data = raw.map(function(x) { return x.Read * 1000; });
   var xLabels = raw.map(function(x) {
     var date = new Date(x.Date);
-    return date.getMonth() + '/' + date.getDay();
+    return date.getHours() + ':' + date.getMinutes();
   });
   var yLabels = raw.map(function(x) { return (x.Read * 1000) + ' W'; });
   var width = 250;
