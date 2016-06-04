@@ -1,3 +1,4 @@
+"use strict"
 const request = require('request');
 const config = require('../config');
 const cloogy = require('../utils/cloogy');
@@ -118,26 +119,28 @@ exports.messageReceived = function (req, res) {
           sendTextMessage(sender, getConsumptionSelection(data));
         });
       } else if (id == 'MAIN_GRAPH') {
-        chart.chart(function(uri) {
-          sendTextMessage(sender, {
-            "attachment": {
-              "type": "template",
-              "payload": {
-                "template_type": "generic",
-                "elements": [{
-                  "title": "Monthly Consumption",
-                  "subtitle": "You consumed xx monthly.",
-                  "image_url": uri
-                },
-                {
-                  "title": "Weekly Consumption",
-                  "subtitle": "You consumed xx monthly.",
-                  "image_url": uri
+        chart.chartMonth(function(uriA) {
+          chart.chartWeek(function(uriB) {
+            sendTextMessage(sender, {
+              "attachment": {
+                "type": "template",
+                "payload": {
+                  "template_type": "generic",
+                  "elements": [{
+                    "title": "Monthly Consumption",
+                    "subtitle": "You consumed xx monthly.",
+                    "image_url": uriA
+                  },
+                  {
+                    "title": "Weekly Consumption",
+                    "subtitle": "You consumed xx monthly.",
+                    "image_url": uriB
+                  }
+                ]
                 }
-              ]
               }
-            }
-          })
+            });
+          });
         });
     } else if (id == 'MAIN_WHOIS')
     {

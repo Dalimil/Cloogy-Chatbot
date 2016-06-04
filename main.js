@@ -48,11 +48,13 @@ app.get('/', function(req, res) { // Intro website ?
   );
 });
 
-app.get('/chart', chartController.chart);
+app.get('/chart', chartController.chartMonth);
 
 //app.get('/list', statusController.listAll);
 
 app.get('/units', cloogyController.listAllUnits);
+
+app.get('/consumptionsAllMonth', cloogyController.consumptionsAllMonth);
 
 app.route('/findDevices').get(cloogyController.findDevices);
 
