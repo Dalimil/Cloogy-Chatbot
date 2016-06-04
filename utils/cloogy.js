@@ -73,15 +73,15 @@ function findDevices(cb) {
     });
 }
 
-function actuate(tagId, command, cb) {
+function actuate(command, cb) {
   var req = {
     uri: 'http://api.cloogy.com/api/1.4/actuations',
     json: true,
     method: 'POST',
     headers: { 'Authorization': 'ISA ' + token },
     body: {
-      "TagId": "a",//tagId,
-      "Command": "a"//command
+      "TagIds": [148058],
+      "Command": command
     }
   };
 
@@ -90,7 +90,7 @@ function actuate(tagId, command, cb) {
       cb(res);
     })
     .catch(function (err) {
-      console.log(err.response.body);
+      console.log(err);
     });
 }
 
