@@ -68,7 +68,9 @@ function handleTrivia(event, sender) {
         id = event.postback.payload
         for(var i=0; i<questions.length; i++) {
             var prefix = 'TRIVIA_Q'+i+'_';
+            console.log('Prefix: '+prefix);
             if(id.indexOf(prefix) >= 0){
+                console.log('Activating: '+prefix);
                 var answer = id.replace(prefix,'');
                 console.log('Answered: "'+answer+'"')
                 if(answer == correct[i]) {
@@ -77,6 +79,7 @@ function handleTrivia(event, sender) {
                 } else {
                     sendTextMessage(sender, {text:'Not correct :('});
                 }
+                console.log(i+' vs '+(questions.length-1))
                 if(i < questions.length-1) {
                     sendTextMessage(sender, questions[i+1]);
                 } else {
