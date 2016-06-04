@@ -40,11 +40,7 @@ const mainSelection = {
           "subtitle": "I'm your friendly Cloogy Assistant. Let me know what you want to do.", //Let me know what you want to do.
           "image_url": "https://scontent.flis2-1.fna.fbcdn.net/v/t1.0-9/481522_453352864725549_1635832609_n.jpg?oh=4d5b255a2a253e369d8d95f178221841&oe=57CE4C15",
           "buttons":[
-            {
-              "type":"postback",
-              "title":"Summary 👈",
-              "payload":"MAIN_STATUS"
-            },
+
             {
               "type":"postback",
               "title":"Energy Consumption 🔋",
@@ -55,11 +51,11 @@ const mainSelection = {
               "title":"Trivia 📝",
               "payload":"MAIN_TRIVIA"
             },
-			{
-			  "type":"postback",
-			  "title":"Who is there?",
-			  "payload":"MAIN_WHOIS"
-			}
+            {
+              "type":"postback",
+              "title":"People in room 👨‍👩‍👧",
+              "payload":"MAIN_WHOIS"
+            }
           ]
         }]
       }
@@ -97,11 +93,11 @@ function getConsumptionSelection(data) {
   // };
 }
 function getWhoisSelection(data) {
-	var count = 0;
-	
-	data.List.forEach(function(element, index, array) {
-		count++;
-	});
+  var count = 0;
+
+  data.List.forEach(function(element, index, array) {
+    count++;
+  });
 
   return {
     // date
@@ -143,8 +139,8 @@ exports.messageReceived = function (req, res) {
             }
           })
         });
-	  } else if (id == 'MAIN_WHOIS')
-	  {
+    } else if (id == 'MAIN_WHOIS')
+    {
         cloogy.findDevices(function (data) {
           sendTextMessage(sender, getWhoisSelection(data));
         });
