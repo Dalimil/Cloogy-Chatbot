@@ -3,7 +3,7 @@ const config = require('../config');
 const cloogy = require('../utils/cloogy');
 const trivia = require('./trivia');
 
-
+const chart = require('./chart');
 
 exports.verify = function(req, res) {
   if (req.query['hub.verify_token'] === config.FB.APP_VERIFY) {
@@ -47,11 +47,11 @@ const mainSelection = {
             "title":"Graph",
             "payload":"MAIN_GRAPH"
           },
-      {
-        "type":"postback",
-        "title":"Trivia",
-        "payload":"MAIN_TRIVIA"
-      }
+          {
+            "type":"postback",
+            "title":"Trivia",
+            "payload":"MAIN_TRIVIA"
+          }
         ]
       }
     }
@@ -97,7 +97,23 @@ exports.messageReceived = function (req, res) {
             sendTextMessage(sender, getConsumptionSelection(data));
           });
         } else if (id == 'MAIN_GRAPH') {
-          sendTextMessage(sender, {text: 'hi'});
+          chart.chart(function(uri) {
+            sendTextMessage(sender, {
+              "attachment": {
+                "type": "template",
+                "payload": {
+                  "template_type": "generic",
+                  "elements": [{
+                    "title": "Trees - ",
+                    "image_url": uri
+                   }]
+                }
+              }
+            })
+          });
+
+
+
         } else if (id == 'MAIN_TRIVIA') {
           trivia.startTrivia(sender);
           GLOBAL.phase = 'trivia';
