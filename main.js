@@ -75,3 +75,7 @@ server.listen(config.PORT, function() {
   console.log("Server dir: " + pp('/'));
   console.log((new Date()).toLocaleTimeString() + " - Server running at http://localhost:" + port);
 });
+
+var phase = '';
+var selectedCar = '';
+var correctAnswer = 0;

@@ -43,7 +43,12 @@ const mainSelection = {
             "type":"postback",
             "title":"Graph",
             "payload":"MAIN_GRAPH"
-          }
+          },
+			{
+				"type":"postback",
+				"title":"Trivia",
+				"payload":"MAIN_TRIVIA"
+			}
         ]
       }
     }
@@ -76,19 +81,28 @@ exports.messageReceived = function (req, res) {
 		event = req.body.entry[0].messaging[i];
 		sender = event.sender.id;
 
-		if (event.postback) {
-			id = event.postback.payload;
-			if(id == 'MAIN_STATUS') {
-				cloogy.consumptions(function(data) {
-					sendTextMessage(sender, getConsumptionSelection(data));
-				});
-			} else if(id == 'MAIN_GRAPH') {
-				sendTextMessage(sender, { text: 'hi' });
+
+		if (phase.indexOf('trivia') >= 0) {
+			handleTrivia(event)
+		} else {
+			if (event.postback) {
+				id = event.postback.payload;
+				if (id == 'MAIN_STATUS') {
+					cloogy.consumptions(function (data) {
+						sendTextMessage(sender, getConsumptionSelection(data));
+					});
+				} else if (id == 'MAIN_GRAPH') {
+					sendTextMessage(sender, {text: 'hi'});
+				} else if (id == 'MAIN_TRIVIA') {
+					startTrivia();
+					phase = 'trivia';
+					console.log("Starting trivia")
+				}
 			}
-		} 
-		else if (event.message && event.message.text) {
-			text = event.message.text;
-			sendTextMessage(sender, mainSelection);
+			else if (event.message && event.message.text) {
+				text = event.message.text;
+				sendTextMessage(sender, mainSelection);
+			}
 		}
 	}
 	res.sendStatus(200);
