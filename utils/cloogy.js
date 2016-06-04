@@ -94,10 +94,36 @@ function actuate(tagId, command, cb) {
     });
 }
 
+function consumptions(cb) {
+  var req = {
+    uri: 'http://api.cloogy.com/api/1.4/consumptions/daily?from=1464739200000&tags=%5B148057%5D&to=1467331199000',
+    json: true,
+    headers: { 'Authorization': 'ISA ' + token },
+  };
+
+  var res = rp(req)
+    .then(function (res) {
+      const data = res.reduce(function (a, b) {
+          return {
+            Read: a.Read + b.Read,
+            ReadCarbon: a.ReadCarbon + b.ReadCarbon,
+            Trees: a.Trees + b.Trees,
+            Cars: a.Cars + b.Cars
+          };
+      })
+      cb(data);
+      // cb(res);
+    })
+    .catch(function (err) {
+      console.log(err.response.body);
+    });
+}
+
 module.exports = {
   // createSession: createSession,
   findUnits: findUnits,
   findTags: findTags,
   findDevices: findDevices,
-  actuate: actuate
+  actuate: actuate,
+  consumptions: consumptions
 };
