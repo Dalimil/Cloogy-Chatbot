@@ -11,3 +11,15 @@ exports.consumptionsAll = function(req, res){ // route
     res.jsonPretty(data);
   });
 };
+
+exports.findUnits = function(req, res){ // route
+  cloogy.findUnits(function(data) {
+    res.jsonPretty(data);
+  });
+};
+
+exports.findDevices = function(req, res){ // route
+  cloogy.findDevices(function(data) {
+    res.jsonPretty(data);
+  });
+};

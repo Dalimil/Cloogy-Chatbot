@@ -54,7 +54,9 @@ app.get('/chart', chartController.chart);
 
 app.get('/units', cloogyController.listAllUnits);
 
-app.get('/consumptionsAll', cloogyController.consumptionsAll);
+app.route('/findDevices').get(cloogyController.findDevices);
+
+app.route('/findUnits').get(cloogyController.findUnits);
 
 app.route('/webhook')
   .get(botController.verify)
