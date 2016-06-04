@@ -84,11 +84,11 @@ function handleTrivia(event, sender) {
                     var minScore = questions.length*2/3;
                     if(GLOBAL.score >= questions.length*2/3) {
                         sendTextMessage(sender, {text:'Congrats, enjoy the light!'});
-                        cloogy.actuate(1);
+                        cloogy.actuate(1, function() {});
                     } else {
                         sendTextMessage(sender, {text:'Sorry, not this time! You should get at least '+minScore+' questions right ;)'});
 
-                        cloogy.actuate(0);
+                        cloogy.actuate(0, function() {});
                     }
                 }
                 break;
