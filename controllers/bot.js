@@ -52,6 +52,11 @@ const mainSelection = {
             "type":"postback",
             "title":"Trivia",
             "payload":"MAIN_TRIVIA"
+          },
+          {
+            "type":"postback",
+            "title":"Who is there?",
+            "payload":"MAIN_WHOIS"
           }
         ]
       }
@@ -88,6 +93,18 @@ function getConsumptionSelection(data) {
   //     }
   // };
 }
+function getWhoisSelection(data) {
+	var count = 0;
+	
+	data.List.forEach(function(element, index, array) {
+		count++;
+	});
+
+  return {
+    // date
+    "text": 'There is ' + count + ' people in the build'
+  };
+}
 
 exports.messageReceived = function (req, res) {
   messaging_events = req.body.entry[0].messaging;
@@ -116,6 +133,11 @@ exports.messageReceived = function (req, res) {
               }
             }
           })
+        });
+	  } else if (id == 'MAIN_WHOIS')
+	  {
+        cloogy.findDevices(function (data) {
+          sendTextMessage(sender, getWhoisSelection(data));
         });
       } else if (id == 'MAIN_TRIVIA') {
         trivia.startTrivia(sender);
