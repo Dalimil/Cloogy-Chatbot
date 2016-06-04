@@ -80,7 +80,13 @@ function handleTrivia(event, sender) {
                     sendTextMessage(sender, questions[i+1]);
                 } else {
                     sendTextMessage(sender, {text:'Done! Your score is '+GLOBAL.score});
+                    var minScore = questions.length*2/3;
+                    if(GLOBAL.score >= questions.length*2/3) {
+                        sendTextMessage(sender, {text:'Congrats, enjoy the light!'});
 
+                    } else {
+                        sendTextMessage(sender, {text:'Sorry, not this time! You should get at least '+minScore+' questions right ;)'});
+                    }
                 }
                 break;
             }
