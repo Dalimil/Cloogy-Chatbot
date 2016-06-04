@@ -34,31 +34,35 @@ const mainSelection = {
     "attachment":{
       "type":"template",
       "payload":{
-        "template_type":"button",
+        "template_type":"generic",
         // "text":"Oh hey there, I'm your friendly Cloogy Assistant. Let me know what you want to do and we can get started.",
-        "text": "Let me know what you want to do.",
-        "buttons":[
-          {
-            "type":"postback",
-            "title":"Show my energy consumption",
-            "payload":"MAIN_STATUS"
-          },
-          {
-            "type":"postback",
-            "title":"Graph",
-            "payload":"MAIN_GRAPH"
-          },
-          {
-            "type":"postback",
-            "title":"Trivia",
-            "payload":"MAIN_TRIVIA"
-          },
-          {
-            "type":"postback",
-            "title":"Who is there?",
-            "payload":"MAIN_WHOIS"
-          }
-        ]
+        "elements":[{
+          "title": "Oh hey there!",
+          "subtitle": "I'm your friendly Cloogy Assistant. Let me know what you want to do.", //Let me know what you want to do.
+          "image_url": "https://scontent.flis2-1.fna.fbcdn.net/v/t1.0-9/481522_453352864725549_1635832609_n.jpg?oh=4d5b255a2a253e369d8d95f178221841&oe=57CE4C15",
+          "buttons":[
+            {
+              "type":"postback",
+              "title":"Summary 👈",
+              "payload":"MAIN_STATUS"
+            },
+            {
+              "type":"postback",
+              "title":"Energy Consumption 🔋",
+              "payload":"MAIN_GRAPH"
+            },
+            {
+              "type":"postback",
+              "title":"Trivia 📝",
+              "payload":"MAIN_TRIVIA"
+            },
+			{
+			  "type":"postback",
+			  "title":"Who is there?",
+			  "payload":"MAIN_WHOIS"
+			}
+          ]
+        }]
       }
     }
 };
@@ -129,7 +133,13 @@ exports.messageReceived = function (req, res) {
                   "title": "Monthly Consumption",
                   "subtitle": "You consumed xx monthly.",
                   "image_url": uri
-                 }]
+                },
+                {
+                  "title": "Weekly Consumption",
+                  "subtitle": "You consumed xx monthly.",
+                  "image_url": uri
+                }
+              ]
               }
             }
           })
