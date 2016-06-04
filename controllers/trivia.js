@@ -2,7 +2,6 @@ const request = require('request');
 const config = require('../config');
 
 
-
 function sendTextMessage(sender, messageData) {
     const payload = {
         recipient: {id: sender},
@@ -14,6 +13,7 @@ function sendTextMessage(sender, messageData) {
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: config.FB.ACCESS_TOKEN},
         method: 'POST',
+
         json: payload
     }, function(error, response, body) {
         if (error) {
@@ -23,7 +23,8 @@ function sendTextMessage(sender, messageData) {
         }
     });
 }
-const carSelection = {
+
+const question1 = {
     "attachment":{
         "type":"template",
         "payload":{
@@ -33,70 +34,87 @@ const carSelection = {
                 {
                     "type":"postback",
                     "title":"Small",
-                    "payload":"CAR_SMALL"
+                    "payload":"TRIVIA_Q1_a"
                 },
                 {
                     "type":"postback",
                     "title":"Medium",
-                    "payload":"CAR_MEDIUM"
+                    "payload":"TRIVIA_Q1_b"
                 },
                 {
                     "type":"postback",
                     "title":"Large",
-                    "payload":"CAR_LARGE"
+                    "payload":"TRIVIA_Q1_c"
                 }
             ]
         }
     }
 };
+var questions = [];
+var correct = [];
 
+function addQuestion(question, options, answer) {
+    var letter = ['a','b','c','d','e','f','g'];
+    var buttons = [];
+    for(var i=0; i<options.length; i++) {
+        buttons.push({
+            "type":"postback",
+            "title":options[i],
+            "payload":"TRIVIA_Q"+i+"_"+letter[i]
+        })
+    }
+    questions.push({
+        "attachment":{
+            "type":"template",
+            "payload":{
+                "template_type":"button",
+                "text":question,
+                "buttons":buttons
+            }
+        }
+        });
+    correct.push(answer);
+
+}
+
+addQuestion('How are you?',['Great','Good','Bad'],'c');
+addQuestion('What time is it?',['1','2','3'],'c');
+addQuestion('Final question',['2','3','4'],'5');
+
+console.log(questions);
+console.log(correct);
 function startTrivia(sender){
     sendTextMessage(sender, {text:'Hi, let\'s do a trivia quiz.'});
-    sendTextMessage(sender, carSelection);
-    GLOBAL.phase = 'trivia';
+    sendTextMessage(sender, question[0]);
+    GLOBAL.score = 0;
 }
 
 function handleTrivia(event, sender) {
-  console.log(event);
+    console.log(event);
     if (event.postback) {
-
         id = event.postback.payload
-        if(id.indexOf('CAR_') >= 0 ){
-            sendTextMessage(sender, {text: 'Okay cool! And how many kilometers do you drive on a normal day?'});
-            GLOBAL.selectedCar = id;
-            console.log('Selected car '+id)
-            GLOBAL.phase = 'trivia_kms'
-        }
-    } else if (GLOBAL.phase == 'trivia_kms') {
-        var daily = parseFloat(event.message.text);
-        console.log('Daily: '+daily);
-        var coefs = {'CAR_SMALL': 2.2, 'CAR_MEDIUM': 4.1, 'CAR_LARGE': 5.85}
-        sendTextMessage(sender, {text: 'Thanks, so let me think...'})
-        var weight = daily / 1000 * 12 * coefs[GLOBAL.selectedCar];
-        sendTextMessage(sender, {text: 'That means your car produces ' + weight.toFixed(2)  + ' tons of CO2 per year.'});
-        sendTextMessage(sender, {text: 'How many trees do you think are needed to process that?'});
-        GLOBAL.correctAnswer = weight * 5;
-        GLOBAL.phase = 'trivia_answer1';
-    } else if (GLOBAL.phase == 'trivia_answer1') {
-        var response = parseFloat(event.message.text);
-        if (response > GLOBAL.correctAnswer * 0.9 && response < GLOBAL.correctAnswer * 1.1) {
-            sendTextMessage(sender, {text:'That\'s right!'});
-        } else {
-            if (response > GLOBAL.correctAnswer) {
-                sendTextMessage(sender, {text:'Nope it\'s not that much.'});
-            } else {
-                sendTextMessage(sender, {text:'Nope it\'s even more!'});
+        for(var i=0; i<questions.length; i++) {
+            var prefix = 'TRIVIA_Q'+i+'_';
+            if(id.indexOf(prefix) >= 0 ){
+                var answer = id.replace(prefix,'');
+                console.log('Answered: "'+answer+'"')
+                if(answer == correct[i]) {
+                    sendTextMessage(sender, 'Correct!');
+                    GLOBAL.score++;
+                } else {
+                    sendTextMessage(sender, 'Not correct :(');
+                }
+                if(i < questions.length-1) {
+                    sendTextMessage(sender, questions[i+1]);
+                } else {
+                    sendTextMessage(sender, 'Done! Your score is '+GLOBAL.score);
+
+                }
+                break;
             }
         }
-        sendTextMessage(sender, {text: 'It\'s ' + GLOBAL.correctAnswer.toFixed(2) + ' trees to be precise.'});
-        sendTextMessage(sender, {text: 'TODO.'});
-        GLOBAL.phase = 'trivia_answer2';
-    } else if (GLOBAL.phase == 'trivia_answer2') {
-        var response = event.message.text;
-
-        sendTextMessage(sender, {text: 'Ha ' + response});
-        GLOBAL.phase = '';
     }
+
 }
 
 module.exports = {
