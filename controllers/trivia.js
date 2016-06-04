@@ -35,7 +35,7 @@ function addQuestion(question, options, answer) {
         buttons.push({
             "type":"postback",
             "title":options[i],
-            "payload":"TRIVIA_Q"+i+"_"+letter[i]
+            "payload":"TRIVIA_Q"+questions.length+"_"+letter[i]
         })
     }
     questions.push({
