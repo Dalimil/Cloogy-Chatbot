@@ -24,32 +24,6 @@ function sendTextMessage(sender, messageData) {
     });
 }
 
-const question1 = {
-    "attachment":{
-        "type":"template",
-        "payload":{
-            "template_type":"button",
-            "text":"What kind of car do you drive?",
-            "buttons":[
-                {
-                    "type":"postback",
-                    "title":"Small",
-                    "payload":"TRIVIA_Q1_a"
-                },
-                {
-                    "type":"postback",
-                    "title":"Medium",
-                    "payload":"TRIVIA_Q1_b"
-                },
-                {
-                    "type":"postback",
-                    "title":"Large",
-                    "payload":"TRIVIA_Q1_c"
-                }
-            ]
-        }
-    }
-};
 var questions = [];
 var correct = [];
 
@@ -72,7 +46,7 @@ function addQuestion(question, options, answer) {
                 "buttons":buttons
             }
         }
-        });
+    });
     correct.push(answer);
 
 }
@@ -118,6 +92,6 @@ function handleTrivia(event, sender) {
 }
 
 module.exports = {
-  startTrivia: startTrivia,
-  handleTrivia: handleTrivia
+    startTrivia: startTrivia,
+    handleTrivia: handleTrivia
 };
