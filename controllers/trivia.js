@@ -79,7 +79,7 @@ function handleTrivia(event, sender) {
                 if(i < questions.length-1) {
                     sendTextMessage(sender, questions[i+1]);
                 } else {
-                    sendTextMessage(sender, 'Done! Your score is '+GLOBAL.score);
+                    sendTextMessage(sender, {text:'Done! Your score is '+GLOBAL.score});
 
                 }
                 break;
