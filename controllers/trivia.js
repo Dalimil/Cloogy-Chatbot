@@ -57,7 +57,7 @@ addQuestion('If you compare traveling 2000 km by car or plane, which produces mo
 addQuestion('And what if you\'re traveling alone in the car, which produces more CO2?',['Car','Plane'],'a','Traveling by car alone is actually producing 50% more CO2 than a flight.');
 
 function startTrivia(sender){
-    sendTextMessage(sender, {text:'Hi, let\'s do a trivia quiz.'});
+    sendTextMessage(sender, {text:'Okay, let\'s do a trivia quiz!'});
     setTimeout(function(){
         sendTextMessage(sender, questions[0]);
     },500);
@@ -88,7 +88,7 @@ function handleTrivia(event, sender) {
                 if(i < questions.length-1) {
                     setTimeout(function(){
                         sendTextMessage(sender, questions[i+1]);
-                    },1000);
+                    },1500);
                 } else {
                     sendTextMessage(sender, {text:'Done! Your score is '+GLOBAL.score});
                     var minScore = questions.length*2/3;
