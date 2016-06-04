@@ -3,7 +3,6 @@ const config = require('../config');
 
 const cloogy = require('../utils/cloogy');
 
-
 function sendTextMessage(sender, messageData) {
     const payload = {
         recipient: {id: sender},
@@ -69,14 +68,14 @@ function handleTrivia(event, sender) {
         id = event.postback.payload
         for(var i=0; i<questions.length; i++) {
             var prefix = 'TRIVIA_Q'+i+'_';
-            if(id.indexOf(prefix) >= 0 ){
+            if(id.indexOf(prefix) >= 0){
                 var answer = id.replace(prefix,'');
                 console.log('Answered: "'+answer+'"')
                 if(answer == correct[i]) {
-                    sendTextMessage(sender, 'Correct!');
+                    sendTextMessage(sender, {text:'Correct!'});
                     GLOBAL.score++;
                 } else {
-                    sendTextMessage(sender, 'Not correct :(');
+                    sendTextMessage(sender, {text:'Not correct :('});
                 }
                 if(i < questions.length-1) {
                     sendTextMessage(sender, questions[i+1]);
@@ -85,9 +84,11 @@ function handleTrivia(event, sender) {
                     var minScore = questions.length*2/3;
                     if(GLOBAL.score >= questions.length*2/3) {
                         sendTextMessage(sender, {text:'Congrats, enjoy the light!'});
-                        cloogy.actuate(0);
+                        cloogy.actuate(1);
                     } else {
                         sendTextMessage(sender, {text:'Sorry, not this time! You should get at least '+minScore+' questions right ;)'});
+
+                        cloogy.actuate(0);
                     }
                 }
                 break;
