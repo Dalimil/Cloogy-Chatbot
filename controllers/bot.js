@@ -32,7 +32,7 @@ const mainSelection = {
       "type":"template",
       "payload":{
         "template_type":"button",
-        "text":"What do you want to see?",
+        "text":"What would you like to see?",
         "buttons":[
           {
             "type":"postback",
@@ -49,34 +49,21 @@ const mainSelection = {
     }
 };
 
-function getConsumptionSelection(trees) {
+function getConsumptionSelection(data) {
 	return {
 	    "attachment": {
 	      "type": "template",
 	      "payload": {
 	        "template_type": "generic",
 	        "elements": [{
-	          "title": "First card",
-	          "subtitle": "Element #1 of an hscroll - " + trees,
-	          "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
-	          "buttons": [{
-	            "type": "web_url",
-	            "url": "https://www.messenger.com/",
-	            "title": "Web url"
-	          }, {
-	            "type": "postback",
-	            "title": "Postback",
-	            "payload": "Payload for first element in a generic bubble",
-	          }],
+	          "title": "Trees - " + data.Trees,
+	          "image_url": "https://www.arborday.org/enterprise/images/hero-enterprise.jpg"
+	         },{
+	          "title": "Carbon - " + data.ReadCarbon,
+	          "image_url": "http://spectrum.ieee.org/image/MjMyNjY1Mw"
 	        },{
-	          "title": "Second card",
-	          "subtitle": "Element #2 of an hscroll",
-	          "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
-	          "buttons": [{
-	            "type": "postback",
-	            "title": "Postback",
-	            "payload": "Payload for second element in a generic bubble",
-	          }],
+	          "title": "Cars - " + data.Cars,
+	          "image_url": "https://chart.googleapis.com/chart?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World"
 	        }]
 	      }
 	    }
@@ -93,8 +80,7 @@ exports.messageReceived = function (req, res) {
 			id = event.postback.payload;
 			if(id == 'MAIN_STATUS') {
 				cloogy.consumptions(function(data) {
-					// getConsumptionSelection
-					sendTextMessage(sender, { text: data });
+					sendTextMessage(sender, getConsumptionSelection(data));
 				});
 			} else if(id == 'MAIN_GRAPH') {
 				sendTextMessage(sender, { text: 'hi' });

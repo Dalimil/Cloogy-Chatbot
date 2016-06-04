@@ -23,7 +23,7 @@
 
 var rp = require('request-promise');
 
-var token = "LKC0LUx0nfsM9hqQe8YQG2GHaEF4tN57CwE6mW83GJ78VJEccarGpGJo/ALGb4Kyl5UYKdK8xhSPCPVO/kW63A9oNDqe8+wy4LpSDZBDV9wg660VjD0tgDH7"; // 6873
+var token = "dpQxLlhQo8brcNuEN/hN6nkFDvP3Y3E29PVcToniaZY+un5QZ60FWTum3Vd1tlggCLfONrj07OSLVVk9b09zfEs8EOsJQA=="; // 6873
 
 function findUnits(cb) {
   var req = {
