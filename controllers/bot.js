@@ -1,3 +1,4 @@
+"use strict"
 const request = require('request');
 const config = require('../config');
 const cloogy = require('../utils/cloogy');
@@ -40,11 +41,7 @@ const mainSelection = {
           "subtitle": "I'm your friendly Cloogy Assistant. Let me know what you want to do.", //Let me know what you want to do.
           "image_url": "https://scontent.flis2-1.fna.fbcdn.net/v/t1.0-9/481522_453352864725549_1635832609_n.jpg?oh=4d5b255a2a253e369d8d95f178221841&oe=57CE4C15",
           "buttons":[
-            {
-              "type":"postback",
-              "title":"Summary 👈",
-              "payload":"MAIN_STATUS"
-            },
+
             {
               "type":"postback",
               "title":"Energy Consumption 🔋",
@@ -55,11 +52,11 @@ const mainSelection = {
               "title":"Trivia 📝",
               "payload":"MAIN_TRIVIA"
             },
-			{
-			  "type":"postback",
-			  "title":"Who is there?",
-			  "payload":"MAIN_WHOIS"
-			}
+            {
+              "type":"postback",
+              "title":"People in room 👨‍👩‍👧",
+              "payload":"MAIN_WHOIS"
+            }
           ]
         }]
       }
@@ -97,11 +94,11 @@ function getConsumptionSelection(data) {
   // };
 }
 function getWhoisSelection(data) {
-	var count = 0;
-	
-	data.List.forEach(function(element, index, array) {
-		count++;
-	});
+  var count = 0;
+
+  data.List.forEach(function(element, index, array) {
+    count++;
+  });
 
   return {
     // date
@@ -110,41 +107,43 @@ function getWhoisSelection(data) {
 }
 
 exports.messageReceived = function (req, res) {
-  messaging_events = req.body.entry[0].messaging;
+  var messaging_events = req.body.entry[0].messaging;
   for (var i = 0; i < messaging_events.length; i++) {
-    event = req.body.entry[0].messaging[i];
-    sender = event.sender.id;
+    var event = req.body.entry[0].messaging[i];
+    var sender = event.sender.id;
 
     if (event.postback) {
-      id = event.postback.payload;
+      var id = event.postback.payload;
       if (id == 'MAIN_STATUS') {
         cloogy.consumptions(function (data) {
           sendTextMessage(sender, getConsumptionSelection(data));
         });
       } else if (id == 'MAIN_GRAPH') {
-        chart.chart(function(uri) {
-          sendTextMessage(sender, {
-            "attachment": {
-              "type": "template",
-              "payload": {
-                "template_type": "generic",
-                "elements": [{
-                  "title": "Monthly Consumption",
-                  "subtitle": "You consumed xx monthly.",
-                  "image_url": uri
-                },
-                {
-                  "title": "Weekly Consumption",
-                  "subtitle": "You consumed xx monthly.",
-                  "image_url": uri
+        chart.chartMonth(function(uriA) {
+          chart.chartWeek(function(uriB) {
+            sendTextMessage(sender, {
+              "attachment": {
+                "type": "template",
+                "payload": {
+                  "template_type": "generic",
+                  "elements": [{
+                    "title": "Monthly Consumption",
+                    "subtitle": "You consumed xx monthly.",
+                    "image_url": uriA
+                  },
+                  {
+                    "title": "Weekly Consumption",
+                    "subtitle": "You consumed xx monthly.",
+                    "image_url": uriB
+                  }
+                ]
                 }
-              ]
               }
-            }
-          })
+            });
+          });
         });
-	  } else if (id == 'MAIN_WHOIS')
-	  {
+    } else if (id == 'MAIN_WHOIS')
+    {
         cloogy.findDevices(function (data) {
           sendTextMessage(sender, getWhoisSelection(data));
         });
@@ -155,7 +154,7 @@ exports.messageReceived = function (req, res) {
       }
     }
     else if (event.message && event.message.text) {
-      text = event.message.text;
+      var text = event.message.text;
       sendTextMessage(sender, mainSelection);
     }
 

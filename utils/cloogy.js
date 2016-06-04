@@ -94,9 +94,19 @@ function actuate(command, cb) {
     });
 }
 
-function consumptionsAll(cb) {
+
+function consumptionsAllMonth(cb) {
+  var ts = Date.now();
+  consumptionsAll(cb, ts - 2629746000, ts);
+}
+function consumptionsAllWeek(cb) {
+  var ts = Date.now();
+  consumptionsAll(cb, ts - 604800000, ts);
+}
+
+function consumptionsAll(cb, from, to) {
   var req = {
-    uri: 'http://api.cloogy.com/api/1.4/consumptions/hourly?from=1464739200000&tags=%5B148057%5D&to=1467331199000',
+    uri: 'http://api.cloogy.com/api/1.4/consumptions/hourly?from='+from+'&tags=%5B148057%5D&to='+to,
     json: true,
     headers: { 'Authorization': 'ISA ' + token },
   };
@@ -142,5 +152,6 @@ module.exports = {
   findDevices: findDevices,
   actuate: actuate,
   consumptions: consumptions,
-  consumptionsAll: consumptionsAll
+  consumptionsAllMonth: consumptionsAllMonth,
+  consumptionsAllWeek: consumptionsAllWeek
 };
