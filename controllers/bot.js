@@ -102,7 +102,7 @@ function getWhoisSelection(data) {
 
   return {
     // date
-    "text": 'There is ' + count + ' people in the build'
+    "text": 'There are ' + count + ' people in the building.'
   };
 }
 
@@ -119,8 +119,12 @@ exports.messageReceived = function (req, res) {
           sendTextMessage(sender, getConsumptionSelection(data));
         });
       } else if (id == 'MAIN_GRAPH') {
-        chart.chartMonth(function(uriA) {
-          chart.chartWeek(function(uriB) {
+        cloogy.consumptions(function (data) {
+          sendTextMessage(sender, getConsumptionSelection(data));
+        });
+
+        chart.chartMonth(function(uriA, sumA) {
+          chart.chartWeek(function(uriB, sumB) {
             sendTextMessage(sender, {
               "attachment": {
                 "type": "template",
@@ -128,12 +132,12 @@ exports.messageReceived = function (req, res) {
                   "template_type": "generic",
                   "elements": [{
                     "title": "Monthly Consumption",
-                    "subtitle": "You consumed xx monthly.",
+                    "subtitle": "You consumed " + sumA/1000 +" kWh last month.",
                     "image_url": uriA
                   },
                   {
                     "title": "Weekly Consumption",
-                    "subtitle": "You consumed xx monthly.",
+                    "subtitle": "You consumed " + sumB/1000 + " kWh last week.",
                     "image_url": uriB
                   }
                 ]

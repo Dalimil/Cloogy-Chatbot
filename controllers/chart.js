@@ -1,15 +1,25 @@
 var cloogy = require('../utils/cloogy');
 
 exports.chartMonth = function(cb){ // route
-  cloogy.consumptionsAllMonth(createChart(cb));
+  cloogy.consumptionsAllMonth(createChart(cb, 30));
 };
 exports.chartWeek = function(cb) {
-  cloogy.consumptionsAllWeek(createChart(cb));
+  cloogy.consumptionsAllWeek(createChart(cb, 6));
 }
 
-function createChart(cb) {
+function createChart(cb, num) {
   return function(raw) {
-    var data = raw.map(function(x) { return x.Read * 1000; });
+    var start = raw.map(function(x) { return x.Read * 1000; });
+    console.log(start);
+    var data = [];
+    var sum = 0;
+    for(var i=0; i<=num; i++) {
+      data[i] = i < start.length ? start[i] : 0;
+      sum = sum + data[i];
+    }
+    console.log(data);
+
+
   var xLabels = raw.map(function(x) {
     var date = new Date(x.Date);
     return date.getHours() + ':' + date.getMinutes();
@@ -34,6 +44,6 @@ function createChart(cb) {
   console.log(uri);
 
   // res.end(uri);
-   cb(uri);
+   cb(uri, sum);
   };
 }
