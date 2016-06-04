@@ -17,7 +17,9 @@
     "express-session": "^1.13.0",
     "mongoose": "^4.4.19",
     "morgan": "^1.7.0",
+    "nodemon": "^1.9.2",
     "pug": "^2.0.0-alpha7",
-    "request": "^2.72.0"
+    "request": "^2.72.0",
+    "request-promise": "^3.0.0"
   }
 }

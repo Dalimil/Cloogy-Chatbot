@@ -27,48 +27,51 @@ mongoose.connect(config.MONGODB_URI); // Connect to MongoDB
 
 // Set up secure cookie session
 app.use(session({
-	secret: config.APP_SECRET,
-	saveUninitialized: false,
-	resave: false, // keep the most recent session modification
-	store: new MongoStore({ mongooseConnection: mongoose.connection })
+  secret: config.APP_SECRET,
+  saveUninitialized: false,
+  resave: false, // keep the most recent session modification
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 
 /** Route handlers */
 const statusController = require('./controllers/status');
 const botController = require('./controllers/bot');
+const cloogyController = require('./controllers/cloogy');
 
-// Expose urls like /static/images/logo.png 
+// Expose urls like /static/images/logo.png
 app.use('/static', express.static(pp('public'))); // first arg could be omitted
 
 app.get('/', function(req, res) { // Intro website ?
-	// Render .pug template with any JSON locals/variables:
-	res.render('index', 
-		{ title: 'Demo', data: { name: "Shop", items: [3, 5, 8] } } 
-	); 
+  // Render .pug template with any JSON locals/variables:
+  res.render('index',
+    { title: 'Demo', data: { name: "Shop", items: [3, 5, 8] } }
+  );
 });
 
 app.get('/list', statusController.listAll);
 
+app.get('/units', cloogyController.listAllUnits);
+
 app.route('/webhook')
-	.get(botController.verify)
-	.post(botController.messageReceived);
+  .get(botController.verify)
+  .post(botController.messageReceived);
 
 /* Specify both GET and POST endpoint */
-app.route('/debug') 
-	.get(function(req, res) {
-		var info = req.requestInfo;
-		res.jsonPretty(info); // custom method
-	})
-	.post(function(req, res) {
-		// Or with status: res.status(500).json({ error: 'message' });
-		res.json(req.requestInfo);
-	});
+app.route('/debug')
+  .get(function(req, res) {
+    var info = req.requestInfo;
+    res.jsonPretty(info); // custom method
+  })
+  .post(function(req, res) {
+    // Or with status: res.status(500).json({ error: 'message' });
+    res.json(req.requestInfo);
+  });
 
 
 server.listen(config.PORT, function() {
-	var host = server.address().address;
-	var port = server.address().port;
-	// console.log(app.get('env'));
-	console.log("Server dir: " + pp('/'));
-	console.log((new Date()).toLocaleTimeString() + " - Server running at http://localhost:" + port);
+  var host = server.address().address;
+  var port = server.address().port;
+  // console.log(app.get('env'));
+  console.log("Server dir: " + pp('/'));
+  console.log((new Date()).toLocaleTimeString() + " - Server running at http://localhost:" + port);
 });
