@@ -52,9 +52,9 @@ function addQuestion(question, options, answer, fact) {
     facts.push(fact);
 }
 
+addQuestion('What kind of pilot energy process is researched in Portugal and is considered a clean and safe energy process?',['Coal','Marine','Nuclear'],'b','According to research 40% of domestic electrical consumption could be covered by marine energy.');
 addQuestion('If you compare traveling 2000 km by car or plane, which produces more CO2? We\'re considering a mid-sized car with four other passengers.',['Car','Plane'],'b','Traveling by plane produces 300% more CO2.');
-addQuestion('And what if you\'re traveling alone in the car, which produces more CO2?',['Car','Plane'],'a','Traveling by car is actually producing 50% more CO2.');
-addQuestion('Final question',['2','3','4'],'5','');
+addQuestion('And what if you\'re traveling alone in the car, which produces more CO2?',['Car','Plane'],'a','Traveling by car alone is actually producing 50% more CO2 than a flight.');
 
 function startTrivia(sender){
     sendTextMessage(sender, {text:'Hi, let\'s do a trivia quiz.'});
