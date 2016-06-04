@@ -1,3 +1,7 @@
+GLOBAL.phase = '';
+GLOBAL.selectedCar = '';
+GLOBAL.correctAnswer = 0;
+
 const express = require('express');
 const bodyParser = require('body-parser'); // additional body parsing
 const morgan = require('morgan'); // General request logger
@@ -75,7 +79,3 @@ server.listen(config.PORT, function() {
   console.log("Server dir: " + pp('/'));
   console.log((new Date()).toLocaleTimeString() + " - Server running at http://localhost:" + port);
 });
-
-var phase = '';
-var selectedCar = '';
-var correctAnswer = 0;
