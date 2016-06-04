@@ -73,13 +73,12 @@ function handleTrivia(event, sender) {
         var coefs = {'CAR_SMALL': 2.2, 'CAR_MEDIUM': 4.1, 'CAR_LARGE': 5.85}
         sendTextMessage(sender, {text: 'Thanks, so let me think...'})
         var weight = daily / 1000 * 12 * coefs[GLOBAL.selectedCar];
-        sendTextMessage(sender, {text: 'That means your car produces ' + weight + ' tons of CO2 per year.'});
+        sendTextMessage(sender, {text: 'That means your car produces ' + weight.toFixed(2)  + ' tons of CO2 per year.'});
         sendTextMessage(sender, {text: 'How many trees do you think are needed to process that?'});
         GLOBAL.correctAnswer = weight * 5;
         GLOBAL.phase = 'trivia_answer1';
     } else if (GLOBAL.phase == 'trivia_answer1') {
         var response = parseFloat(event.message.text);
-
         if (response > GLOBAL.correctAnswer * 0.9 && response < GLOBAL.correctAnswer * 1.1) {
             sendTextMessage(sender, {text:'That\'s right!'});
         } else {
@@ -89,7 +88,7 @@ function handleTrivia(event, sender) {
                 sendTextMessage(sender, {text:'Nope it\'s even more!'});
             }
         }
-        sendTextMessage(sender, {text: 'It\'s ' + GLOBAL.correctAnswer + ' trees to be precise.'});
+        sendTextMessage(sender, {text: 'It\'s ' + GLOBAL.correctAnswer.toFixed(2) + ' trees to be precise.'});
         sendTextMessage(sender, {text: 'TODO.'});
         GLOBAL.phase = 'trivia_answer2';
     } else if (GLOBAL.phase == 'trivia_answer2') {

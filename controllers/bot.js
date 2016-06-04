@@ -99,7 +99,7 @@ exports.messageReceived = function (req, res) {
         } else if (id == 'MAIN_GRAPH') {
           sendTextMessage(sender, {text: 'hi'});
         } else if (id == 'MAIN_TRIVIA') {
-          trivia.startTrivia();
+          trivia.startTrivia(sender);
           GLOBAL.phase = 'trivia';
           console.log("Starting trivia")
         }
