@@ -1,5 +1,6 @@
 const request = require('request');
 const config = require('../config');
+const cloogy = require('../utils/cloogy');
 
 exports.verify = function(req, res) {
 	if (req.query['hub.verify_token'] === config.FB.APP_VERIFY) {
@@ -26,6 +27,62 @@ function sendTextMessage(sender, messageData) {
 	});
 }
 
+const mainSelection = {
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        "text":"What do you want to see?",
+        "buttons":[
+          {
+            "type":"postback",
+            "title":"Energy status",
+            "payload":"MAIN_STATUS"
+          },
+          {
+            "type":"postback",
+            "title":"Graph",
+            "payload":"MAIN_GRAPH"
+          }
+        ]
+      }
+    }
+};
+
+function getConsumptionSelection(trees) {
+	return {
+	    "attachment": {
+	      "type": "template",
+	      "payload": {
+	        "template_type": "generic",
+	        "elements": [{
+	          "title": "First card",
+	          "subtitle": "Element #1 of an hscroll - " + trees,
+	          "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+	          "buttons": [{
+	            "type": "web_url",
+	            "url": "https://www.messenger.com/",
+	            "title": "Web url"
+	          }, {
+	            "type": "postback",
+	            "title": "Postback",
+	            "payload": "Payload for first element in a generic bubble",
+	          }],
+	        },{
+	          "title": "Second card",
+	          "subtitle": "Element #2 of an hscroll",
+	          "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+	          "buttons": [{
+	            "type": "postback",
+	            "title": "Postback",
+	            "payload": "Payload for second element in a generic bubble",
+	          }],
+	        }]
+	      }
+	    }
+	};
+}
+
 exports.messageReceived = function (req, res) {
 	messaging_events = req.body.entry[0].messaging;
 	for (var i = 0; i < messaging_events.length; i++) {
@@ -33,44 +90,19 @@ exports.messageReceived = function (req, res) {
 		sender = event.sender.id;
 
 		if (event.postback) {
-			text = JSON.stringify(event.postback);
-			sendTextMessage(sender, { text: "Postback received: "+ text });
-			continue;
-		}
-		if (event.message && event.message.text) {
+			id = event.postback.payload;
+			if(id == 'MAIN_STATUS') {
+				cloogy.consumptions(function(data) {
+					// getConsumptionSelection
+					sendTextMessage(sender, { text: data });
+				});
+			} else if(id == 'MAIN_GRAPH') {
+				sendTextMessage(sender, { text: 'hi' });
+			}
+		} 
+		else if (event.message && event.message.text) {
 			text = event.message.text;
-			
-			sendTextMessage(sender, {
-				"attachment": {
-				  "type": "template",
-				  "payload": {
-				    "template_type": "generic",
-				    "elements": [{
-				      "title": "First card",
-				      "subtitle": "Element #1 of an hscroll",
-				      "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
-				      "buttons": [{
-				        "type": "web_url",
-				        "url": "https://www.messenger.com/",
-				        "title": "Web url"
-				      }, {
-				        "type": "postback",
-				        "title": "Postback",
-				        "payload": "Payload for first element in a generic bubble",
-				      }],
-				    },{
-				      "title": "Second card",
-				      "subtitle": "Element #2 of an hscroll",
-				      "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
-				      "buttons": [{
-				        "type": "postback",
-				        "title": "Postback",
-				        "payload": "Payload for second element in a generic bubble",
-				      }],
-				    }]
-				  }
-				}
-			});
+			sendTextMessage(sender, mainSelection);
 		}
 	}
 	res.sendStatus(200);
