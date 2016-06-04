@@ -107,13 +107,13 @@ function getWhoisSelection(data) {
 }
 
 exports.messageReceived = function (req, res) {
-  messaging_events = req.body.entry[0].messaging;
+  var messaging_events = req.body.entry[0].messaging;
   for (var i = 0; i < messaging_events.length; i++) {
-    event = req.body.entry[0].messaging[i];
-    sender = event.sender.id;
+    var event = req.body.entry[0].messaging[i];
+    var sender = event.sender.id;
 
     if (event.postback) {
-      id = event.postback.payload;
+      var id = event.postback.payload;
       if (id == 'MAIN_STATUS') {
         cloogy.consumptions(function (data) {
           sendTextMessage(sender, getConsumptionSelection(data));
@@ -154,7 +154,7 @@ exports.messageReceived = function (req, res) {
       }
     }
     else if (event.message && event.message.text) {
-      text = event.message.text;
+      var text = event.message.text;
       sendTextMessage(sender, mainSelection);
     }
 
