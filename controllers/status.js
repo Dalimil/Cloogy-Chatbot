@@ -1,19 +1,29 @@
 // Iterface functions for our Mongoose MongoDB model
-var User = require('../models/User');
+var Status = require('../models/Status');
   
-// create a new user called John
-var user = new User({
-	name: 'John Quill',
-	username: 'johnny',
-	password: 'secret_password' 
+// create a new record
+var status = new Status({
+	name: 'Lights',
+	powered: true
 });
 
 exports.listAll = function(req, res){ // route
-	getAllUsers(function(users) {
-		res.jsonPretty({ users: users });
+	getAll(function(data) {
+		res.jsonPretty({ data: data });
 	});
 };
 
+// FIND - find(), findOne(), findById()
+function getAll(callback) {
+	Status.find({}, function(err, users) {
+		if (err) throw err;
+		
+		callback(users); // all the users
+	});
+};
+
+ 
+/*
 exports.addUser = addUser;
 exports.getAllUsers = getAllUsers;
 // + other methods to be exposed...
@@ -26,14 +36,6 @@ function addUser(user) {
 	});
 };
 
-// FIND - find(), findOne(), findById()
-function getAllUsers(callback) {
-	User.find({}, function(err, users) {
-		if (err) throw err;
-		
-		callback(users); // all the users
-	});
-};
 
 function getUser(name) {
 	// get the user starlord55
@@ -78,7 +80,7 @@ function updateUser() {
 	});
 }
 
-/** QUERIES - 2 types - MongoDB syntax supported */
+// QUERIES - 2 types - MongoDB syntax supported 
 function queryDemo() { 
 	// 1. With a JSON doc
 	Person.
@@ -105,3 +107,4 @@ function queryDemo() {
 		exec(callback);
 }
 
+*/
