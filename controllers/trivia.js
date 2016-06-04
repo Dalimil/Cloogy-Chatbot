@@ -1,6 +1,8 @@
 const request = require('request');
 const config = require('../config');
 
+const cloogy = require('../utils/cloogy');
+
 
 function sendTextMessage(sender, messageData) {
     const payload = {
@@ -83,7 +85,7 @@ function handleTrivia(event, sender) {
                     var minScore = questions.length*2/3;
                     if(GLOBAL.score >= questions.length*2/3) {
                         sendTextMessage(sender, {text:'Congrats, enjoy the light!'});
-
+                        cloogy.actuate(0);
                     } else {
                         sendTextMessage(sender, {text:'Sorry, not this time! You should get at least '+minScore+' questions right ;)'});
                     }

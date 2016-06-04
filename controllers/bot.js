@@ -35,7 +35,6 @@ const mainSelection = {
       "type":"template",
       "payload":{
         "template_type":"generic",
-        // "text":"Oh hey there, I'm your friendly Cloogy Assistant. Let me know what you want to do and we can get started.",
         "elements":[{
           "title": "Oh hey there!",
           "subtitle": "I'm your friendly Cloogy Assistant. Let me know what you want to do.", //Let me know what you want to do.
