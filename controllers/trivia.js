@@ -86,7 +86,9 @@ function handleTrivia(event, sender) {
                 },500);
                 console.log(i+' vs '+(questions.length-1))
                 if(i < questions.length-1) {
-                    sendTextMessage(sender, questions[i+1]);
+                    setTimeout(function(){
+                        sendTextMessage(sender, questions[i+1]);
+                    },1000);
                 } else {
                     sendTextMessage(sender, {text:'Done! Your score is '+GLOBAL.score});
                     var minScore = questions.length*2/3;
