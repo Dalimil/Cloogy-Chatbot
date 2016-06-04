@@ -48,13 +48,13 @@ app.get('/', function(req, res) { // Intro website ?
   );
 });
 
-app.get('/chart', chartController.chart);
+app.get('/chart', chartController.chartMonth);
 
 //app.get('/list', statusController.listAll);
 
 app.get('/units', cloogyController.listAllUnits);
 
-app.get('/consumptionsAll', cloogyController.consumptionsAll);
+app.get('/consumptionsAllMonth', cloogyController.consumptionsAllMonth);
 
 app.route('/webhook')
   .get(botController.verify)

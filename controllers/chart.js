@@ -1,7 +1,14 @@
 var cloogy = require('../utils/cloogy');
 
-exports.chart = function(cb){ // route
-  cloogy.consumptionsAll(function(raw) {
+exports.chartMonth = function(cb){ // route
+  cloogy.consumptionsAllMonth(createChart(cb));
+};
+exports.chartWeek = function(cb) {
+  cloogy.consumptionsAllWeek(createChart(cb));
+}
+
+function createChart(cb) {
+  return function(raw) {
     var data = raw.map(function(x) { return x.Read * 1000; });
   var xLabels = raw.map(function(x) {
     var date = new Date(x.Date);
@@ -28,5 +35,5 @@ exports.chart = function(cb){ // route
 
   // res.end(uri);
    cb(uri);
-  });
-};
+  };
+}

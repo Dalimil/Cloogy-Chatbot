@@ -1,13 +1,13 @@
 var cloogy = require('../utils/cloogy');
 
-exports.listAllUnits = function(req, res){ // route
+exports.listAllUnits = function(req, res) { // route
   cloogy.consumptions(function(data) {
     res.jsonPretty(data);
   });
 };
 
-exports.consumptionsAll = function(req, res){ // route
-  cloogy.consumptionsAll(function(data) {
+exports.consumptionsAllMonth = function(req, res) { // route
+  cloogy.consumptionsAllMonth(function(data) {
     res.jsonPretty(data);
   });
 };
