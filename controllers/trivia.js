@@ -27,8 +27,8 @@ function sendTextMessage(sender, messageData) {
 
 var questions = [];
 var correct = [];
-
-function addQuestion(question, options, answer) {
+var facts = [];
+function addQuestion(question, options, answer, fact) {
     var letter = ['a','b','c','d','e','f','g'];
     var buttons = [];
     for(var i=0; i<options.length; i++) {
@@ -49,12 +49,12 @@ function addQuestion(question, options, answer) {
         }
     });
     correct.push(answer);
-
+    facts.push(fact);
 }
 
-addQuestion('How are you?',['Great','Good','Bad'],'c');
-addQuestion('What time is it?',['1','2','3'],'c');
-addQuestion('Final question',['2','3','4'],'5');
+addQuestion('If you compare traveling 2000 km by car or plane, which produces more CO2? We\'re considering a mid-sized car with four other passengers.',['Car','Plane'],'b','Traveling by plane produces 300% more CO2.');
+addQuestion('And what if you\'re traveling alone in the car, which produces more CO2?',['Car','Plane'],'a','Traveling by car is actually producing 50% more CO2.');
+addQuestion('Final question',['2','3','4'],'5','');
 
 function startTrivia(sender){
     sendTextMessage(sender, {text:'Hi, let\'s do a trivia quiz.'});
@@ -79,6 +79,7 @@ function handleTrivia(event, sender) {
                 } else {
                     sendTextMessage(sender, {text:'Not correct :('});
                 }
+                sendTextMessage(sender, {text:facts[i]});
                 console.log(i+' vs '+(questions.length-1))
                 if(i < questions.length-1) {
                     sendTextMessage(sender, questions[i+1]);
