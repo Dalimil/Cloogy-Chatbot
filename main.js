@@ -2,8 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser'); // additional body parsing
 const morgan = require('morgan'); // General request logger
 const session = require('express-session'); // session cookies
-const MongoStore = require('connect-mongo')(session); // Session data storage (server-side MongoDB)
-const mongoose = require('mongoose'); // ORM for MongoDB
 const path = require('path'); // path.join
 const pp = function(s){ return path.join(__dirname, s); };
 const app = express();
@@ -23,20 +21,18 @@ const debug = require('./utils/debug'); // + my own logger
 app.use(debug.requestInfo); // Middleware function - Order/Place of call important!
 // app.use('/articles', requestInfo); // Works but messes up request URLs - /articles/id -> /id
 
-mongoose.connect(config.MONGODB_URI); // Connect to MongoDB
-
 // Set up secure cookie session
 app.use(session({
   secret: config.APP_SECRET,
   saveUninitialized: false,
   resave: false, // keep the most recent session modification
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 
 /** Route handlers */
-const statusController = require('./controllers/status');
+const statusController = require('./controllers/chart');
 const botController = require('./controllers/bot');
 const cloogyController = require('./controllers/cloogy');
+const chartController = require('./controllers/chart');
 
 // Expose urls like /static/images/logo.png
 app.use('/static', express.static(pp('public'))); // first arg could be omitted
@@ -48,7 +44,9 @@ app.get('/', function(req, res) { // Intro website ?
   );
 });
 
-app.get('/list', statusController.listAll);
+app.get('/chart', chartController.chart);
+
+//app.get('/list', statusController.listAll);
 
 app.get('/units', cloogyController.listAllUnits);
 
