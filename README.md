@@ -1,6 +1,8 @@
-# Cloogy-Chatbot
-Facebook Chatbot + Cloogy to control IoT
+# Cloogy-Chatbot - (Lisbon, 3-4th June 2016)
 
+**Facebook Chatbot + Cloogy to control IoT**
+
+**What the Hack?** - Hackathon in Lisbon (part of Landing.jobs festival 2016)
 
 ![Screenshot 1](/screenshots/1.PNG?raw=true "Screenshot 1")
 ![Screenshot 2](/screenshots/2.PNG?raw=true "Screenshot 2")
